@@ -1,6 +1,7 @@
 import {expect} from 'chai';
 import jsdom from 'jsdom';
 import fs from 'fs';
+import { doesNotReject } from 'assert';
 
 describe ('Our first test', () => {
   it('should pass', () => {
@@ -9,14 +10,16 @@ describe ('Our first test', () => {
 });
 
 describe('index.html', () => {
-  it('should say hello', () => {
-    const index = fs.readFileSync('./src/index.html', "utf-8");
-    require('jsdom/lib/old-api').env(index, function(err, window){
+  it("should say 'Hello world!'", () => {
+      // read file content to variable
+      const index = fs.readFileSync('./src/index.html', "utf-8");
 
-      const h1 = window.document.getElementsByTagName('h1')[0];
-      expect(h1.innerHTML).to.equal("Hello World!");
-
-      window.close();
-    });
-  });
-});
+      // pass this variable to jsdom:
+      jsdom.env(index, function(err, window) {
+          const h1 = window.document.getElementByTagName('h1')[0];   // read our h1
+          expect(h1.innerHTML).to.equal("Helloooooooo World!");      //<---- passed
+          done();
+          window.close();
+      });
+  })
+})
